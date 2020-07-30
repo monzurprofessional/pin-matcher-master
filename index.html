@@ -39,11 +39,12 @@
                             <div class="calc-button-row">
                                 <div class="button" onclick="backspace()" > < </div>
                                 <div class="button"onclick="keypad('0')">0</div>
-                                <div class="button" onclick="input.value = ' ' ">C</div>
+                                <div class="button" onclick="whitespace() ">C</div>
+                              
                             </div>
                             <div>
                                 <button type="submit" id="submit-btn" class="submit-btn">Submit</button>
-                                <p class="action-left">3 try left</p>
+                                <p class="action-left" id="warning" > <span id="action-left">3 </span> try left</p>
                             </div>
                     </div>
                 </div>
@@ -52,6 +53,7 @@
         <div class="notify-section">
             <p class="notify" id="denied">❌ Pin Didn't Match, Please try again</p>
             <p class="notify " id="granted">✅ Pin Matched... Secret door is opening for you</p>
+            
         </div>
     </div>
 
@@ -69,26 +71,59 @@
         function keypad (a){
            input.value += a
         }
-        // function clear (a){
-        //     input.value += " "
-        // }
+          
+        function backspace() {
+        var value = document.getElementById("input").value;
+        document.getElementById("input").value = value.substr(0, value.length - 1);
+        }
+        function whitespace() {
+        var value = document.getElementById("input").value;
+        document.getElementById("input").value = value.substr(0, value.length * 0);
+        }
 
         document.getElementById('submit-btn').addEventListener('click', function(){
            if(document.getElementById('input').value == document.getElementById('pin-output').value ){
                document.getElementById("granted").style.display = "block";
-           }
-           else{
+               document.getElementById("denied").style.display = "none";
+           } 
+
+ 
+            if(document.getElementById('input').value !== document.getElementById('pin-output').value ){
             document.getElementById("denied").style.display = "block";
+            document.getElementById("granted").style.display = "none";
+           var remainingTries = document.getElementById("action-left").innerHTML;
+           if(remainingTries > 0){
+           document.getElementById("action-left").innerHTML = remainingTries-1;
            }
-          
+
+           if( remainingTries == 0){
+            document.getElementById("warning").innerHTML = 'you are out of your tries';
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').innerHTML = 'Disabled'
+           }
+            } 
+           
+            if(document.getElementById("input").value.length == 0 &&  document.getElementById("pin-output").value.length !== 0){ 
+            alert(" input value is empty");
+            document.getElementById("denied").style.display = "none";
+              var remainingTries = document.getElementById("action-left").innerHTML;
+              document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+        
+            }
+            if(document.getElementById("pin-output").value.length == 0 &&  document.getElementById("input").value.length !== 0){
+            alert("please generate pic first");
+            var remainingTries = document.getElementById("action-left").innerHTML;
+              document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+           
+            }
+            if(document.getElementById("input").value.length == 0 && document.getElementById("pin-output").value.length == 0){
+            alert("Both values are empty");
+            document.getElementById("granted").style.display = "none";
+            }
         })
 
-
-        
-        function backspace() {
-    var value = document.getElementById("input").value;
-    document.getElementById("input").value = value.substr(0, value.length - 1);
-}
+   
+      
     </script>
 </body>
 </html>

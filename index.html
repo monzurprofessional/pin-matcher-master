@@ -37,9 +37,9 @@
                               <div class="button"onclick="keypad('3')">3</div>
                             </div>
                             <div class="calc-button-row">
-                                <div class="button" onclick="backspace()" > < </div>
+                                <div class="button" id="clear" onclick="backspace()" > < </div>
                                 <div class="button"onclick="keypad('0')">0</div>
-                                <div class="button" onclick="whitespace() ">C</div>
+                                <div class="button" id="ac"onclick="whitespace()" >C</div>
                               
                             </div>
                             <div>
@@ -60,66 +60,66 @@
 
     <script>
         document.getElementById('generate-btn').addEventListener('click', function(){
-            var result = Math.random() * 8999 + 1000 ;
+            var result = Math.random() * 8999 + 1000 ; // formula between two range: (max-min) + min
             var output = Math.round(result);
-            document.getElementById('pin-output').value = output;
-
-            
+            document.getElementById('pin-output').value = output;     
         })
-
-
-        function keypad (a){
-           input.value += a
-        }
-          
+        function keypad (number){
+            input.value += number
+         }
+            
         function backspace() {
-        var value = document.getElementById("input").value;
-        document.getElementById("input").value = value.substr(0, value.length - 1);
+            var value = document.getElementById("input").value;
+            document.getElementById("input").value = value.substr(0, value.length - 1);
         }
         function whitespace() {
-        var value = document.getElementById("input").value;
-        document.getElementById("input").value = value.substr(0, value.length * 0);
+            var value = document.getElementById("input").value;
+            document.getElementById("input").value = value.substr(0, value.length * 0);
         }
 
         document.getElementById('submit-btn').addEventListener('click', function(){
-           if(document.getElementById('input').value == document.getElementById('pin-output').value ){
-               document.getElementById("granted").style.display = "block";
-               document.getElementById("denied").style.display = "none";
-           } 
+                if(document.getElementById('input').value == document.getElementById('pin-output').value ){
+                    document.getElementById("granted").style.display = "block";
+                    document.getElementById("denied").style.display = "none";
+                } 
 
- 
-            if(document.getElementById('input').value !== document.getElementById('pin-output').value ){
-            document.getElementById("denied").style.display = "block";
-            document.getElementById("granted").style.display = "none";
-           var remainingTries = document.getElementById("action-left").innerHTML;
-           if(remainingTries > 0){
-           document.getElementById("action-left").innerHTML = remainingTries-1;
-           }
+    
+                if(document.getElementById('input').value !== document.getElementById('pin-output').value ){
+                    document.getElementById("denied").style.display = "block";
+                    document.getElementById("granted").style.display = "none";
+                            //code of remaining attempts starts here
+                    var remainingTries = document.getElementById("action-left").innerHTML;
+                        if(remainingTries > 0){
+                            document.getElementById("action-left").innerHTML = remainingTries-1;
+                        }
 
-           if( remainingTries == 0){
-            document.getElementById("warning").innerHTML = 'you are out of your tries';
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('submit-btn').innerHTML = 'Disabled'
-           }
-            } 
-           
-            if(document.getElementById("input").value.length == 0 &&  document.getElementById("pin-output").value.length !== 0){ 
-            alert(" input value is empty");
-            document.getElementById("denied").style.display = "none";
-              var remainingTries = document.getElementById("action-left").innerHTML;
-              document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
-        
-            }
-            if(document.getElementById("pin-output").value.length == 0 &&  document.getElementById("input").value.length !== 0){
-            alert("please generate pic first");
-            var remainingTries = document.getElementById("action-left").innerHTML;
-              document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
-           
-            }
-            if(document.getElementById("input").value.length == 0 && document.getElementById("pin-output").value.length == 0){
-            alert("Both values are empty");
-            document.getElementById("granted").style.display = "none";
-            }
+                        if( remainingTries == 0){
+                                document.getElementById("warning").innerHTML = 'you are out of your tries';
+                                document.getElementById('submit-btn').disabled = true;
+                                document.getElementById('submit-btn').innerHTML = 'Disabled'
+                        }
+        } 
+
+           //if there is any input value is empty:(added extra)
+
+                if(document.getElementById("input").value.length == 0 &&  document.getElementById("pin-output").value.length !== 0){ 
+                    alert(" input value is empty");
+                    document.getElementById("denied").style.display = "none";
+                    var remainingTries = document.getElementById("action-left").innerHTML;
+                    document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+                
+                }
+                if(document.getElementById("pin-output").value.length == 0 &&  document.getElementById("input").value.length !== 0){
+                    alert("please generate pin first");
+                    var remainingTries = document.getElementById("action-left").innerHTML;
+                    document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+            
+                }
+                if(document.getElementById("input").value.length == 0 && document.getElementById("pin-output").value.length == 0){
+                    alert("Both values are empty");
+                    document.getElementById("granted").style.display = "none";
+                }
+            
         })
 
    

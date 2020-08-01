@@ -12,13 +12,13 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="pin-generator half-width" >
-                    <input class="form-control" id="pin-output" type="text" >
+                    <input class="form-control" id="pinOutput" type="text" >
                     <button class="generate-btn" id="generate-btn">Generate Pin</button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="input-section half-width">
-                    <input class="form-control" name="input" id="input" type="text" value="">
+                    <input class="form-control"  id="pinInput" type="text" value="">
                     <div class="numbers">
                         <div class="calc-body">
                             <div class="calc-button-row">
@@ -62,68 +62,108 @@
         document.getElementById('generate-btn').addEventListener('click', function(){
             var result = Math.random() * 8999 + 1000 ; // formula between two range: (max-min) + min
             var output = Math.round(result);
-            document.getElementById('pin-output').value = output;     
+            document.getElementById('pinOutput').value = output;   
+            displayNone();  
         })
+
+        function displayNone (action) {
+            if(action == true){
+            document.getElementById("denied").style.display = "none";
+            }
+            if (action == false) {
+                 document.getElementById("granted").style.display = "none";
+            }
+           else{
+                document.getElementById("denied").style.display = "none"; 
+                document.getElementById("granted").style.display = "none";
+            }
+        }    
+        
+
+        function displayBlock(action) {
+            if(action == true){
+                 document.getElementById("denied").style.display = "block";
+            }
+            if (action == false) {
+                 document.getElementById("granted").style.display = "block";
+            }  
+        }
+
         function keypad (number){
-            input.value += number
+            pinInput.value += number
          }
-            
-        function backspace() {
-            var value = document.getElementById("input").value;
-            document.getElementById("input").value = value.substr(0, value.length - 1);
+
+        function backspace() { 
+            var inputValue = document.getElementById("pinInput").value;
+            document.getElementById("pinInput").value = inputValue.substr(0, inputValue.length - 1);
         }
         function whitespace() {
-            var value = document.getElementById("input").value;
-            document.getElementById("input").value = value.substr(0, value.length * 0);
+            var inputValue = document.getElementById("pinInput").value;
+            document.getElementById("pinInput").value = inputValue.substr(0, inputValue.length * 0);
         }
-
+        
         document.getElementById('submit-btn').addEventListener('click', function(){
-                if(document.getElementById('input').value == document.getElementById('pin-output').value ){
-                    document.getElementById("granted").style.display = "block";
-                    document.getElementById("denied").style.display = "none";
-                } 
-
-    
-                if(document.getElementById('input').value !== document.getElementById('pin-output').value ){
-                    document.getElementById("denied").style.display = "block";
-                    document.getElementById("granted").style.display = "none";
-                            //code of remaining attempts starts here
-                    var remainingTries = document.getElementById("action-left").innerHTML;
-                        if(remainingTries > 0){
-                            document.getElementById("action-left").innerHTML = remainingTries-1;
+            var inputValue = document.getElementById("pinInput").value; 
+            var outputValue = document.getElementById("pinOutput").value;
+               
+                        if( inputValue == outputValue ){
+                            displayNone(true);
+                            displayBlock(false);
                         }
-
-                        if( remainingTries == 0){
+                        if( inputValue !== outputValue ){
+                            displayBlock(true);
+                            displayNone(false);
+                                //  code of remaining attempts starts here
+                           var remainingTries = document.getElementById("action-left").innerHTML;
+                            if(remainingTries > 0){
+                                document.getElementById("action-left").innerHTML = remainingTries-1;
+                            }
+                            if( remainingTries == 1){
                                 document.getElementById("warning").innerHTML = 'you are out of your tries';
                                 document.getElementById('submit-btn').disabled = true;
                                 document.getElementById('submit-btn').innerHTML = 'Disabled'
-                        }
-        } 
+                            }
+                        }   
+                                  // empty input value warning:(added extra)
+                              
+                            if(inputValue.length == 0 && outputValue.length !== 0){ 
+                                alert(" input value is empty");
+                            displayNone(true);
+                                var remainingTries = document.getElementById("action-left").innerHTML;
+                                document.getElementById("pinInput").innerHTML = remainingTries*1 + 1;
+                            }    
+                            if( outputValue.length  == 0 && inputValue.length  !== 0){
+                                alert("please generate pin first");
+                                displayNone(true);
+                                var remainingTries = document.getElementById("action-left").innerHTML;
+                                document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+                            }   
+                            if(inputValue.length  == 0 && outputValue.length  == 0){
+                                alert("Both values are empty");
+                                displayNone(false);
+                            }   
+                            
+        })          
+                       
+                        
+                            
+                                
+   
+    </script>
+</body>
+</html>     
+                    
+                    
 
-           //if there is any input value is empty:(added extra)
+    
 
-                if(document.getElementById("input").value.length == 0 &&  document.getElementById("pin-output").value.length !== 0){ 
-                    alert(" input value is empty");
-                    document.getElementById("denied").style.display = "none";
-                    var remainingTries = document.getElementById("action-left").innerHTML;
-                    document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
+                        
+        
+           
+
                 
-                }
-                if(document.getElementById("pin-output").value.length == 0 &&  document.getElementById("input").value.length !== 0){
-                    alert("please generate pin first");
-                    var remainingTries = document.getElementById("action-left").innerHTML;
-                    document.getElementById("action-left").innerHTML = remainingTries*1 + 1;
             
-                }
-                if(document.getElementById("input").value.length == 0 && document.getElementById("pin-output").value.length == 0){
-                    alert("Both values are empty");
-                    document.getElementById("granted").style.display = "none";
-                }
-            
-        })
+        
 
    
       
-    </script>
-</body>
-</html>
